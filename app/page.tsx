@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export default function Home() {
   const [LongUrl, setLongUrl] = useState<string>("");
@@ -31,15 +31,16 @@ export default function Home() {
         }
       }
   
-    } catch (error: any) {
-      console.error("Error shortening URL:", error);
-      
-      if (error.response && typeof error.response.data === "string") {
-        setErrorMessage(error.response.data);
-      } else {
+    } catch (error: unknown) {
+      if(axios.isAxiosError(error))
+      {
+        if (error.response && typeof error.response.data === "string") {
+          setErrorMessage(error.response.data);
+        } else {
         setErrorMessage("Network error. Please try again.");
-      }
+        }
     }
+  }
   };
 
   return (
