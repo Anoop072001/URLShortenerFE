@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 export default function Home() {
   const [LongUrl, setLongUrl] = useState<string>("");
