@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# URL Shortener Frontend
 
-## Getting Started
+This is a **Next.js** frontend for a URL shortener. It allows users to shorten URLs using a backend API and supports custom short URLs.
 
-First, run the development server:
+## 🚀 Features
+- Shorten long URLs
+- Use custom short URLs
+- Error handling for duplicate URLs and network issues
+- Responsive UI with Tailwind CSS
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🛠️ Installation & Setup
+### 1️⃣ Clone the Repository
+```sh
+git clone https://github.com/your-repo/url-shortener-frontend.git
+cd url-shortener-frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Install Dependencies
+```sh
+yarn install  # or npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3️⃣ Configure API Endpoint
+Edit `API_BASE_URL` in `src/config.ts` (or directly in `Home.tsx`) to point to your backend:
+```ts
+const API_BASE_URL = "https://your-backend-url.com";
+```
+If running locally, use:
+```ts
+const API_BASE_URL = "http://localhost:8080";
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4️⃣ Start the Development Server
+```sh
+yarn dev  # or npm run dev
+```
+Now, visit `http://localhost:3000` in your browser.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🔌 Using a Custom Backend
+To use this frontend with your own backend:
+1. Ensure your backend has a **POST** endpoint at `/shorten`.
+2. It should accept a **long URL** and an optional **custom URL**.
+3. It must return a valid response, either:
+   - JSON: `{ "shortUrl": "https://short.ly/abc123" }`
+   - Plain text: `https://short.ly/abc123`
+4. If a custom URL is taken, return a meaningful error message.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Example Spring Boot Controller:
+```java
+@PostMapping("/shorten")
+public ResponseEntity<?> shortenUrl(@RequestParam String longUrl, @RequestParam(required = false) String customUrl) {
+    try {
+        String shortenedUrl = urlService.shortenUrl(longUrl, customUrl);
+        return ResponseEntity.ok(shortenedUrl);
+    } catch (CustomUrlAlreadyExistsException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Custom URL already exists");
+    }
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🤝 Contributing
+Feel free to fork, improve, and create pull requests.
+For major changes, please open an issue first.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Technologies Used
+- **Next.js** (React Framework)
+- **TypeScript**
+- **Axios** (for API requests)
+- **Tailwind CSS** (for styling)
+
+---
+
+## 📜 License
+This project is open-source under the **MIT License**.
+
